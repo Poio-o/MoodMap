@@ -1,1 +1,367 @@
-/* You can add global styles to this file, and also import other style files */
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Manrope:wght@600;700;800&display=swap");
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+:root {
+  --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-display: "Manrope", sans-serif;
+
+  /* Refined, Calm & Accessible Light Palette (WCAG AA/AAA) */
+  --bg-app: #f4f6f8;
+  --bg-surface: #ffffff;
+  --bg-surface-soft: #eef2f6;
+  --bg-surface-elevated: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #475569;
+  --text-muted: #64748b;
+  --border-subtle: #e2e8f0;
+  --border-strong: #cbd5e1;
+
+  /* Muted Professional Semantic Accents */
+  --accent-calm: #2c6e7f;
+  --accent-calm-light: #e6f2f5;
+  --accent-calm-dark: #205260;
+  --accent-green: #2f7a5b;
+  --accent-green-light: #e7f4ee;
+  --accent-amber: #b4691e;
+  --accent-amber-light: #fcf1e3;
+  --accent-coral: #b94a48;
+  --accent-coral-light: #fcebeba;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 10px 24px rgba(15, 23, 42, 0.12);
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+
+  --nav-width: 260px;
+}
+
+[data-theme="dark"] {
+  /* Refined Calm Dark Palette (Deep Slate, balanced contrast) */
+  --bg-app: #0f141c;
+  --bg-surface: #161d28;
+  --bg-surface-soft: #1e2736;
+  --bg-surface-elevated: #222d3e;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --border-subtle: #273344;
+  --border-strong: #37475e;
+
+  --accent-calm: #5ca4b8;
+  --accent-calm-light: rgba(92, 164, 184, 0.16);
+  --accent-calm-dark: #74b7ca;
+  --accent-green: #58b08a;
+  --accent-green-light: rgba(88, 176, 138, 0.16);
+  --accent-amber: #e29d4c;
+  --accent-amber-light: rgba(226, 157, 76, 0.16);
+  --accent-coral: #df7471;
+  --accent-coral-light: rgba(223, 116, 113, 0.16);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 16px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+  font-family: var(--font-body);
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input,
+textarea,
+select {
+  font-family: inherit;
+  color: inherit;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 14px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid var(--accent-calm);
+  outline-offset: 1px;
+}
+
+/* App Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  position: relative;
+}
+
+.main-viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin-left: var(--nav-width);
+  background: var(--bg-app);
+  position: relative;
+  overflow-x: hidden;
+}
+
+@media (max-width: 900px) {
+  .main-viewport {
+    margin-left: 0;
+    padding-bottom: 70px; /* space for bottom nav */
+  }
+}
+
+/* Common UI Atoms */
+.badge-calm {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent-calm-light);
+  color: var(--accent-calm);
+}
+
+.badge-green {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent-green-light);
+  color: var(--accent-green);
+}
+
+.badge-amber {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent-amber-light);
+  color: var(--accent-amber);
+}
+
+.badge-coral {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accent-coral-light);
+  color: var(--accent-coral);
+}
+
+/* MapLibre GL Custom Markers & Clean Overrides */
+.maplibregl-map {
+  font-family: var(--font-body);
+  width: 100%;
+  height: 100%;
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px !important;
+  opacity: 0.7;
+}
+
+.mood-marker-root {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.mood-pin-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  width: max-content;
+  max-width: 196px;
+  transition: transform 0.15s ease;
+}
+
+.mood-pin-wrapper:hover {
+  transform: translateY(-2px) scale(1.04);
+}
+
+.mood-pin-wrapper.selected {
+  transform: translateY(-3px) scale(1.07);
+}
+
+.mood-pin-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 3px 10px rgba(15, 23, 42, 0.25);
+  border: 2px solid #ffffff;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.mood-pin-label {
+  margin-top: 4px;
+  background: var(--bg-surface);
+  padding: 4px 9px;
+  border-radius: 8px;
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: max-content;
+  max-width: 188px;
+}
+
+.mood-pin-wrapper.selected .mood-pin-label {
+  border-color: var(--accent-calm);
+  box-shadow: 0 4px 12px rgba(44, 110, 127, 0.26);
+}
+
+.mood-pin-label strong {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--text-primary);
+  white-space: normal;
+  word-break: break-word;
+}
+
+.mood-pin-label small {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 1px;
+}
+
+.mood-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.mood-status-dot.calm { background: var(--accent-green); }
+.mood-status-dot.medium { background: var(--accent-amber); }
+.mood-status-dot.busy { background: var(--accent-coral); }
+
+.mood-zone-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.14);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  width: max-content;
+  max-width: 196px;
+  text-align: center;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.mood-zone-badge.selected {
+  border-color: var(--accent-calm);
+  box-shadow: 0 4px 12px rgba(44, 110, 127, 0.26);
+}
+
+.mood-zone-badge small {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* Optional OSM POI marker */
+.mood-osm-poi {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.mood-osm-dot {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-surface);
+  border: 2px solid var(--accent-calm);
+  color: var(--accent-calm);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.18);
+  transition: transform 0.15s ease;
+}
+
+.mood-osm-poi:hover .mood-osm-dot,
+.mood-osm-poi.selected .mood-osm-dot {
+  transform: scale(1.16);
+}
+
+.mood-osm-tag {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.12);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+
+.mood-osm-poi:hover .mood-osm-tag,
+.mood-osm-poi.selected .mood-osm-tag {
+  opacity: 1;
+}
+

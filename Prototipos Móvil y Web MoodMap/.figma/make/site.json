@@ -1,0 +1,10 @@
+{
+  "description": "Find sensory-friendly places with community ratings for noise, lighting, and crowds, plus quieter times—helping autistic and sensory-sensitive people plan outings.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

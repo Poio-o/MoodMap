@@ -1,12 +1,29 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { BottomNavComponent } from './components/nav/bottom-nav.component';
+import { SideNavComponent } from './components/nav/side-nav.component';
+import { HeaderComponent } from './components/header/header.component';
+import { MapViewComponent } from './components/map/map-view.component';
+import { PlaceListComponent } from './components/place-list/place-list.component';
+import { PlaceDetailComponent } from './components/place-detail/place-detail.component';
+import { ReviewModalComponent } from './components/review-modal/review-modal.component';
+import { PlacesService } from './services/places.service';
 
 @Component({
-  imports: [RouterOutlet],
   selector: 'app-root',
-  styleUrl: './app.css',
+  standalone: true,
+  imports: [
+    SideNavComponent,
+    BottomNavComponent,
+    HeaderComponent,
+    MapViewComponent,
+    PlaceListComponent,
+    PlaceDetailComponent,
+    ReviewModalComponent,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
+  styleUrl: './app.css',
 })
 export class App {
-  protected readonly title = signal('MoodMap');
+  readonly placesService = inject(PlacesService);
 }
